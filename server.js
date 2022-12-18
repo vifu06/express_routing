@@ -51,7 +51,15 @@ const f1 = (re,res) => {
     res.send("Execution complete for multiple middlwares")
 }
 
+// Request to handle multiple middlewares
 app.get('/multiple-middlewares',[m1,m2,f1]);
+
+app.get('/inline-middleware',(req,res,next)=>{
+    console.log("This is the middleware, response will be sent in the callback");
+    next();
+},(req,res)=>{
+    res.send("Response sent after the middleware")
+});
 
 app.listen(3002,()=>{
     console.log(`App Started on port 3002`);

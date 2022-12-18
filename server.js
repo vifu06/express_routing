@@ -1,4 +1,5 @@
 const express = require('express');
+const router = require('./routes');
 
 const app = express();
 
@@ -54,12 +55,25 @@ const f1 = (re,res) => {
 // Request to handle multiple middlewares
 app.get('/multiple-middlewares',[m1,m2,f1]);
 
+// inline middleware request
 app.get('/inline-middleware',(req,res,next)=>{
     console.log("This is the middleware, response will be sent in the callback");
     next();
 },(req,res)=>{
     res.send("Response sent after the middleware")
 });
+
+// chained requests
+app.route('/book').get((req,res)=>{
+    res.send('List of books');
+}).post((req,res)=>{
+    res.send('Add a book');
+}).put((req,res)=>{
+    res.send('updated book');
+})
+
+// invoking routes file
+router(app);
 
 app.listen(3002,()=>{
     console.log(`App Started on port 3002`);
